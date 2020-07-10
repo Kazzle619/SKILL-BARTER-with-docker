@@ -1,0 +1,40 @@
+<% if @previous_path[:action] == "create" %>
+  <% provide :heading, "新規案件作成"%>
+<% elsif @previous_path[:action] == "edit" %>
+  <% provide :heading, "案件編集" %>
+<% end %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <%= render 'layouts/global_navigation_side_bar' %>
+    </div>
+    <div class="col-md-9">
+      <div class="row my-3">
+        <div class="col-md-12">
+          <h5><strong><%= yield(:heading) %>完了</strong></h5>
+        </div>
+
+        <div class="col-md-12 mt-2">
+          <%= render 'propositions/proposition_detail', proposition: @proposition, favorite: @favorite %>
+        </div>
+
+        <div class="col-md-12 mt-2">
+          <h6>マッチングする案件を探しますか？</h6>
+          <div class="row">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-3">
+              <%= link_to "いいえ", mypage_users_path, class: "btn btn-outline-danger btn-block" %>
+            </div>
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-3">
+              <%= link_to "はい", match_proposition_path(@proposition.id), class: "btn btn-outline-info btn-block" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

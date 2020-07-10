@@ -1,0 +1,57 @@
+<div class="card bg-white border border-white p-3">
+  <div class="col-md-12">
+    <%# チャットコメント一覧。無限スクロールに後程変更予定。 %>
+    <div id="chat-messages-<%= proposition.room.id if proposition.room.present? %>" class="row">
+      <% if chat_messages.present? %>
+        <% chat_messages.each do |chat_message| %>
+          <% if user_signed_in? && chat_message.user == current_user %>
+            <%= render 'chat_messages/my_chat_message', chat_message: chat_message %>
+          <% else %>
+            <%= render 'chat_messages/opponent_chat_message', chat_message: chat_message %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <div class="text-center">
+          <p>
+          チャットがまだ始まっていません。
+          始まるとここにメッセージが表示されます。
+          </p>
+        </div>
+      <% end %>
+    </div>
+
+    <%# 当事者にのみチャットフォームを表示。 %>
+    <% if (not user_signed_in?) || (not proposition.is_matched?) %>
+      <%# 何も表示しない。 %>
+    <% elsif proposition.user == current_user || proposition.offering.user == current_user %>
+      <div class="row">
+        <%# 画像投稿→実装が大変そうなので一度非表示に。 %>
+        <div hidden>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="far fa-image fa-lg"></i>
+              </span>
+            </div>
+            <div class="custom-file">
+              <%= file_field_tag "参照", id: "chat-image", class: "custom-file-input", accept: "image/*" %>
+              <label class="custom-file-label" for="chat-image" data-browse="参照">画像ファイル選択...</label>
+            </div>
+          </div>
+        </div>
+        <%# コメント投稿 %>
+        <div class="input-group">
+          <div class="input-group">
+            <input id="chat-message" type="text" class="form-control">
+            <span class="input-group-btn">
+              <button id="chat-button" class="btn btn-primary">投稿</button>
+            </span>
+            <div id="chat-user-id" hidden><%= current_user.id %></div>
+            <div id="chat-room-id" hidden><%= proposition.room.id %></div>
+            <%=  %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

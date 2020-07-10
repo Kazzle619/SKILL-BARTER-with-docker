@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <%= render 'layouts/global_navigation_side_bar' %>
+    </div>
+    <div class="col-md-9">
+      <div class="col-md-12">
+        <h4><strong>案件編集</strong></h4>
+      </div>
+      <div class="col-md-12 mt-4">
+        <%= render 'propositions/proposition_form', proposition: @proposition, form_url: proposition_path(@proposition.id), submit_value: "編集完了" %>
+      </div>
+    </div>
+  </div>
+</div>

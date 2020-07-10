@@ -1,0 +1,82 @@
+<div class="card bg-white border border-white">
+  <div class="card-body py-2 px-3">
+    <p class="card-title">
+      <%# 交換ステータス %>
+      <%= render 'propositions/barter_status_badge', proposition: proposition %>
+      <%# マッチングしている場合はマッチング相手を表示 %>
+      <% if proposition.is_matched? %>
+        <%= link_to proposition.offering.title, proposition_path(proposition.offering), class: "text-secondary" %>
+      <% end %>
+    </p>
+    <%# 案件カテゴリタグ %>
+    <p class="card-title">
+      <% proposition.proposition_categories.each do |proposition_category| %>
+        <%= render 'tags/tag_badge', tag: proposition_category.tag %>
+      <% end %>
+      <%# ストックボタン。交換が完了したものには表示しない。 %>
+      <% if not proposition.bartered? %>
+        <span id="favorite-<%= proposition.id %>" class="float-right">
+          <%= render 'favorites/favorite_button', favorite: favorite, proposition: proposition %>
+        </span>
+      <% end %>
+    </p>
+    <%# 案件タイトル %>
+    <h4 class="card-title">
+      <strong><%= proposition.title %></strong>
+      <%# レビューされている場合はレビューレートも表示  %>
+      <div id="star-rate-<%= proposition.id %>"></div>
+    </h4>
+    <script>
+      $('#star-rate-<%= proposition.id %>').raty({
+        size    : 36,
+        starOff : '<%= asset_path('star-off.png') %>',
+        starOn  : '<%= asset_path('star-on.png') %>',
+        starHalf: '<%= asset_path('star-half.png') %>',
+        half    : true,
+        readOnly: true,
+        score   : <%= proposition.review.rate if proposition.review.present? %>,
+      });
+    </script>
+
+    <%# レビューレート %>
+    <div class="card-text">
+    </div>
+
+    <%# 案件説明文 %>
+    <p class="card-title"><%= proposition.introduction %></p>
+
+    <%# 納期。交換完了申請後は表示しない %>
+    <% if proposition.deadline && !proposition.is_bartering? %>
+      <p class="card-text">
+        納期： <%= proposition.deadline.strftime("%Y年%m月%d日中") %>
+      </p>
+    <% end %>
+
+    <%# 完成イメージ %>
+    <% if proposition.rendering_image_id.present? %>
+      <p class="card-text mb-3">
+        完成イメージ
+        <%= image_tag proposition.rendering_image_id.to_s, class: "w-100 h-auto" %>
+      </p>
+    <% end %>
+
+    <div class="actions text-center col-md-10 offset-md-1 mb-3">
+      <%# 自分の案件には案件編集ページ %>
+      <% if user_signed_in? && proposition.user == current_user %>
+        <%= link_to "編集する", edit_proposition_path(proposition.id), class: "btn btn-success btn-block" %>
+        <%= link_to "削除する", proposition_path(proposition.id), method: :delete, class: "btn btn-outline-danger btn-block" %>
+      <%# 未マッチング状態で自分が申請を出していない案件なら申請ボタン %>
+      <% elsif user_signed_in? && (not proposition.is_matched?) && (not proposition.offering_to?) %>
+        <%= link_to "スキル交換申請", offer_propositions_path(offered_id: proposition.id), class: "btn btn-info btn-block"%>
+      <% end %>
+    </div>
+
+    <%# 要望カテゴリタグ %>
+    <p class="card-title">
+      <span>交換希望スキル：</span>
+      <% proposition.request_categories.each do |request_category| %>
+        <%= render 'tags/request_category_tag_badge', tag: request_category.tag %>
+      <% end %>
+    </p>
+</div>
+</div>

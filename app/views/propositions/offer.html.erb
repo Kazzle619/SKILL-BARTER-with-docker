@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>申請用案件選択</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <label class="my-4"><input type="radio" name="offerFrom" onclick="offerChange();" checked="checked" />案件を新規に作成して申請する</label>
+    <label class="ml-5 my-4"><input type="radio" name="offerFrom" onclick="offerChange();" />既存の案件から申請する</label>
+    <div id="new-proposition-form-box" class="col-md-12 rounded bg-white py-3">
+      <%= render 'propositions/proposition_form', proposition: @new_proposition, form_url: proposition_offers_path(@offered_proposition.id), submit_value: "申請" %>
+    </div>
+    <div id="existing-proposition-form-box" class="col-md-12">
+      <% @propositions.each do |proposition| %>
+        <div class="col-md-12 bg-light rounded p-2 mt-2 existing-proposition-<%= proposition.id %>">
+          <%= render 'layouts/matching_relation_info', my_proposition: proposition, opponent_proposition: @offered_proposition %>
+          <%= render 'propositions/proposition_simple_card', proposition: proposition, favorite: Favorite.find_by(user_id: current_user.id, proposition_id: proposition.id) %>
+          <div class="row">
+            <div class="col-md-10">
+            </div>
+            <div class="col-md-2">
+              <%= link_to "申請", proposition_offers_path(@offered_proposition.id, offering_proposition_id: proposition.id), method: :post, class: "btn btn-primary btn-block" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+
+  <script type="text/javascript">
+    function offerChange(){
+      radio = document.getElementsByName('offerFrom')
+      if(radio[0].checked) {
+        document.getElementById('new-proposition-form-box').style.display = "";
+        document.getElementById('existing-proposition-form-box').style.display = "none";
+      }else if(radio[1].checked) {
+        document.getElementById('new-proposition-form-box').style.display = "none";
+        document.getElementById('existing-proposition-form-box').style.display = "";
+      }
+    }
+    //オンロードさせ、リロード時に選択を保持
+    window.onload = offerChange;
+  </script>
+</div>

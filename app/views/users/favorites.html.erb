@@ -1,0 +1,52 @@
+<%# マッチング関係を矢印でも示すよう後程変更予定。 %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <%= render 'layouts/global_navigation_side_bar' %>
+    </div>
+    <div class="col-md-9 rounded bg-white px-4">
+      <div class="row my-3">
+        <div class="col-md-12">
+          <h5><strong><%= current_user.name %>さんのストック案件</strong></h5>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-5 mt-4 d-flex align-items-center">
+              <h6><strong>ストック案件</strong></h6>
+            </div>
+            <div class="col-md-2 mt-4">
+            </div>
+            <div class="col-md-5 mt-4 d-flex align-items-center">
+              <h6><strong>関連する自分の案件</strong></h6>
+            </div>
+          </div>
+        </div>
+        <% @propositions.each do |proposition| %>
+          <div class="col-md-12 mt-2 bg-light rounded-lg my-2">
+            <div class="row">
+              <%# お気に入り案件一覧 %>
+              <div class="col-md-5 my-2">
+                <p class="mb-1">
+                  <%= render 'layouts/matching_relation_info.html.erb', my_proposition: proposition.my_offering_proposition, opponent_proposition: proposition %>
+                </p>
+                <%= render 'propositions/proposition_card', proposition: proposition %>
+              </div>
+              <div class="col-md-2">
+              </div>
+
+              <%# お気に入り案件に関連する自分の案件一覧 %>
+              <div class="col-md-5">
+                <%# 自分が申請を出している相手がいればそれが一番上 %>
+                <% if proposition.offering_to? %>
+                  <div class="col-md-12 my-2 p-0">
+                    <%= render 'propositions/proposition_detail', proposition: proposition.my_offering_proposition, favorite: Favorite.find_by(user_id: current_user.id, proposition: proposition.id) %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

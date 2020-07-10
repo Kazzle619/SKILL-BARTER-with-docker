@@ -1,0 +1,43 @@
+<div class="bg-white sticky-top py-2" style="top: 80px;">
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">案件</a>
+    </li>
+    <li class="nav-item ml-3">
+      <%= link_to "新規案件作成", new_proposition_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item ml-3">
+      <%= link_to "マイ案件", mypage_index_propositions_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item ml-3">
+      <%= link_to "ストック案件", favorites_user_path(current_user.id), class: "nav-link" %>
+    </li>
+    <li class="nav-item ml-3">
+      <%= link_to "案件を探す", propositions_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">アカウント</a>
+    </li>
+    <li class="nav-item ml-3">
+      <%= link_to "プロフィール設定", edit_user_path(current_user.id), class: "nav-link" %>
+    </li>
+    <li class="nav-item ml-3">
+      <%= link_to "フォロワー", followers_user_path(current_user.id), class: "nav-link" %>
+    </li>
+    <li class="nav-item ml-3">
+      <%= link_to "フォロー", following_user_path(current_user.id), class: "nav-link" %>
+    </li>
+    <li class="nav-item ml-3">
+      <%= link_to "ブロック", blocking_user_path(current_user.id), class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">実績</a>
+    </li>
+    <li class="nav-item ml-3">
+      <%= link_to "新規実績作成", new_achievement_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item ml-3">
+      <%= link_to "マイ実績", achievements_path, class: "nav-link" %>
+    </li>
+  </ul>
+</div>

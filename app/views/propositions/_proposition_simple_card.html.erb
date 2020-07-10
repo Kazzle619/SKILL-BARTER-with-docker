@@ -1,0 +1,30 @@
+<div class="card h-100 border border-white">
+  <div class="card-body p-2">
+    <%# 案件カテゴリ %>
+    <p class="card-title">
+      <% proposition.proposition_categories.each do |proposition_category| %>
+        <%= render 'tags/tag_badge', tag: proposition_category.tag %>
+      <% end %>
+      <%# ストックボタン %>
+      <% if not proposition.bartered? %>
+        <span id="favorite-<%= proposition.id %>" class="float-right">
+          <% favorite = Favorite.find_by(user_id: current_user.id, proposition_id: proposition.id) if user_signed_in? %>
+          <%= render 'favorites/favorite_button', favorite: favorite, proposition: proposition %>
+        </span>
+      <% end %>
+    </p>
+
+    <%# 案件情報 %>
+    <%= link_to proposition_path(proposition.id) do %>
+      <h5 class="card-title"><strong><%= proposition.title %></strong></h5>
+      <p class="card-title"><%= proposition.introduction %></p>
+    <% end %>
+    <%# 要望カテゴリ %>
+    <p class="card-title d-flex align-items-center mb-0">
+      <span class="mr-1">交換希望：</span>
+      <% proposition.request_categories.each do |request_category| %>
+        <%= render 'tags/request_category_tag_badge', tag: request_category.tag %>
+      <% end %>
+    </p>
+  </div>
+</div>

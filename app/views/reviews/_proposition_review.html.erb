@@ -1,0 +1,60 @@
+<%# 交換を完了しているか否かで表示する内容を変更 %>
+
+<div class="card h-100 bg-white border border-white">
+  <div class="card-body p-3">
+
+    <% if proposition.is_reviewed? %>
+
+      <%# レビュー編集ボタン。レビューしたユーザーにのみ表示。 %>
+      <% if review.user == current_user %>
+        <div class="card-text text-right">
+          <%= link_to "編集する", edit_proposition_review_path(proposition.id, review.id), class: "btn btn-outline-primary" %>
+        </div>
+      <% end %>
+
+      <%# レビューしたユーザーのプロフィール画像と氏名 %>
+      <div class="card-title">
+        <%= image_tag review.user.profile_image_id.to_s, height: 50, width: 50, class: "rounded-circle", style: "object-fit: cover;" %>
+        <%= review.user.name %>
+      </div>
+
+      <%# レビューレート %>
+      <div class="card-text">
+        <div id="star-rate"></div>
+      </div>
+      <script>
+        $('#star-rate').raty({
+          size    : 36,
+          starOff : '<%= asset_path('star-off.png') %>',
+          starOn  : '<%= asset_path('star-on.png') %>',
+          starHalf: '<%= asset_path('star-half.png') %>',
+          half    : true,
+          readOnly: true,
+          score   : <%= review.rate %>,
+        });
+      </script>
+
+      <%# レビュー内容 %>
+      <div class="card-text d-flex align-items-center text-wrap">
+        <%= review.comment %>
+      </div>
+
+    <%# マッチングしているユーザーで、レビュー前の場合。スキル交換完了申請ボタンを表示 %>
+    <% elsif proposition.matched_with? %>
+      <div class="card-title d-flex align-items-center text-wrap">
+        スキル交換を完了後はレビュー作成ページへ移動します。<br >
+        レビューを作成すると、ここにレビュー内容が表示されます。
+      </div>
+      <div class="card-text text-center">
+        <%= link_to "スキル交換を完了する", new_proposition_review_path(proposition.id), "data-confirm" => "この操作は取り消せません。\nスキル交換を完了してよろしいですか？", class: "btn btn-info" %>
+      </div>
+
+    <%# マッチングしていない、またはマッチングしたユーザーでない場合。 %>
+    <% else %>
+      <div class="card-text d-flex align-items-center text-wrap">
+      レビューが作成されると、ここにレビュー内容が表示されます。
+      </div>
+
+    <% end %>
+  </div>
+</div>
